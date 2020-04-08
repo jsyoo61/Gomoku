@@ -1,15 +1,11 @@
 import signal
 import os
-import sys
 import platform
 import time
 import copy
-from multiprocessing import Process
-from enum import IntEnum
 from gomoku import Gomoku
 from agent import Iterative_Deepening_Alpha_Beta
 from tools import my_random as mrandom
-from tools.tools import Printer
 
 class Timeout(Exception):
     pass
