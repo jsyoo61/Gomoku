@@ -46,7 +46,6 @@ class Timer():
 timelimit = 10.0
 env = Gomoku(board_size = 19)
 timer = Timer()
-printer = Printer()
 
 # 1-1. Choose  player stone
 input_valid = False
