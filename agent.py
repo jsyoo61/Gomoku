@@ -10,8 +10,8 @@ class Iterative_Deepening_Alpha_Beta():
 
         #### Evaluation of values ( domain dependent ) ####
         # Priority needed in iterative deepening alpha beta search, because of "Unknown" perception
-        self.priority_max_value = ['lose', 'tie', 'unknown', 'win'] # Increasing Priority
-        self.priority_min_value = ['lose', 'unknown', 'tie', 'win'] # Increasing Priority
+        self.priority_max = ['lose', 'tie', 'unknown', 'win'] # Increasing Priority
+        self.priority_min = ['lose', 'unknown', 'tie', 'win'] # Increasing Priority
 
     def perceive(self, winner):
         # Win
@@ -43,14 +43,14 @@ class Iterative_Deepening_Alpha_Beta():
         # Shuffle actions to speed up search
         np.random.shuffle(self.actions)
 
-        beta = self.priority_min_value[-1]
-        v = self.priority_max_value[0]
+        beta = self.priority_min[-1]
+        v = self.priority_max[0]
         # Loop until v is maximum
-        while(v != self.priority_max_value[-1]):
+        while(v != self.priority_max[-1]):
             print('searching with max_depth:%s'%(self.max_depth))
             # When alpha == v in the same node, then alpha & v will always be the same in that node
             # So omit alpha
-            v = self.priority_max_value[0]
+            v = self.priority_max[0]
             # 1. Search for nodes that are not searched fully
             for action in self.actions:
                 # 1] Get v_min
@@ -64,7 +64,7 @@ class Iterative_Deepening_Alpha_Beta():
                 else:
                     v_min = self.min_value(self.env.board, v, beta)
                 # 2] v = max(v, v_min) for priority_max,
-                if self.priority_max_value.index(v) < self.priority_max_value.index(v_min):
+                if self.priority_max.index(v) < self.priority_max.index(v_min):
                     v = v_min
                     self.action = action
             self.max_depth += 1
@@ -72,7 +72,7 @@ class Iterative_Deepening_Alpha_Beta():
 
     def max_value(self, state, alpha, beta):
         # Assume current state is not terminal state
-        v = self.priority_max_value[0]
+        v = self.priority_max[0]
         self.depth +=1
 
         # 1. Search only when (depth <= max_depth)
@@ -90,15 +90,15 @@ class Iterative_Deepening_Alpha_Beta():
                     v_min = self.min_value(self.env.board, alpha, beta)
 
                 # 2] v = max(v, v_min) for priority_max
-                v = self.priority_max_value[max(self.priority_max_value.index(v), self.priority_max_value.index(v_min))]
+                v = self.priority_max[max(self.priority_max.index(v), self.priority_max.index(v_min))]
 
                 # 3] if v>=beta for priority_min, return v
-                if self.priority_min_value.index(v) >= self.priority_min_value.index(beta):
+                if self.priority_min.index(v) >= self.priority_min.index(beta):
                     self.depth -= 1
                     return v
 
                 # 4] alpha = max(alpha, v) for priority_max
-                alpha = self.priority_max_value[max(self.priority_max_value.index(alpha), self.priority_max_value.index(v))]
+                alpha = self.priority_max[max(self.priority_max.index(alpha), self.priority_max.index(v))]
             # End of search
             self.depth -= 1
             return v
@@ -110,7 +110,7 @@ class Iterative_Deepening_Alpha_Beta():
 
     def min_value(self, state, alpha, beta):
         # Assume current state is not terminal state
-        v = self.priority_min_value[-1]
+        v = self.priority_min[-1]
         self.depth +=1
 
         # 1. Search only when (depth <= max_depth)
@@ -128,15 +128,15 @@ class Iterative_Deepening_Alpha_Beta():
                     v_max = self.max_value(self.env.board, alpha, beta)
 
                 # 2] v = min(v, v_max) for priority_min
-                v = self.priority_min_value[min(self.priority_min_value.index(v), self.priority_min_value.index(v_max))]
+                v = self.priority_min[min(self.priority_min.index(v), self.priority_min.index(v_max))]
 
                 # 3] if v<=alpha for priority_max, return v
-                if self.priority_max_value.index(v) <= self.priority_max_value.index(alpha):
+                if self.priority_max.index(v) <= self.priority_max.index(alpha):
                     self.depth -= 1
                     return v
 
                 # 4] beta = min(beta, v) for priority_min
-                beta = self.priority_min_value[min(self.priority_min_value.index(beta), self.priority_min_value.index(v))]
+                beta = self.priority_min[min(self.priority_min.index(beta), self.priority_min.index(v))]
             # End of search
             self.depth -= 1
             return v
